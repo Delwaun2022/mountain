@@ -8,7 +8,7 @@ import { ModeType, IListProps,
     EmptyStatusType
 } from '../types'
 
-const defaultSortConfig: IListSortConfig = {
+var defaultSortConfig: IListSortConfig = {
     mode: 'single',
     sortLocal: undefined,
     sorter: {}
@@ -118,8 +118,8 @@ export default class ListCore extends EventEmitter {
             this.state.sortConfig.sortLocal = sortConfig.sortLocal
         }
 
-        const { sorter } = sortConfig
-        const { mode } = this.state.sortConfig
+        var { sorter } = sortConfig
+        var { mode } = this.state.sortConfig
         let mergedSorter = {}
         if (mode === 'multiple') {
             mergedSorter = { ...(this.state.sortConfig.sorter || {}) }
@@ -146,15 +146,15 @@ export default class ListCore extends EventEmitter {
         if (selectionConfig === null) {
             this.state.selectionConfig = null
         } else {
-            const clearDataProps: { ids?: string[], records?: any[] } = {}
-            const { mode } = this.state.selectionConfig || {}
+            var clearDataProps: { ids?: string[], records?: any[] } = {}
+            var { mode } = this.state.selectionConfig || {}
             if (!!mode && !!selectionConfig?.mode && (mode !== selectionConfig?.mode)) {
                 clearDataProps.ids = []
                 clearDataProps.records = []
             }
 
-            const { primaryKey: defaultPrimaryKey = 'id' } = this.getTableProps()
-            const defaultSelectionConfig: IListSelectionConfig = {
+            var { primaryKey: defaultPrimaryKey = 'id' } = this.getTableProps()
+            var defaultSelectionConfig: IListSelectionConfig = {
                 getProps: () => ({}),
                 mode: 'multiple',
                 primaryKey: defaultPrimaryKey,
@@ -169,7 +169,7 @@ export default class ListCore extends EventEmitter {
             }
 
             if (!selectionConfig?.records) {
-                const { primaryKey } = this.state.selectionConfig
+                var { primaryKey } = this.state.selectionConfig
                 this.state.selectionConfig.records = this.getPaginationDataSource().filter(item => {
                     return this.state.selectionConfig.ids.indexOf(item[primaryKey]) !== -1
                 })
@@ -179,8 +179,8 @@ export default class ListCore extends EventEmitter {
 
     getSelectionConfig = () => {
         try {
-            const ignoreIds = this.getPaginationDataSource().filter((record, idx) => {
-                const { disabled = false } = this.state.selectionConfig.getProps(record, idx) || {}
+            var ignoreIds = this.getPaginationDataSource().filter((record, idx) => {
+                var { disabled = false } = this.state.selectionConfig.getProps(record, idx) || {}
                 return disabled === true
             }).map(record => record[this.state.selectionConfig.primaryKey])
             this.state.selectionConfig.ids = this.state.selectionConfig.ids
@@ -190,7 +190,7 @@ export default class ListCore extends EventEmitter {
             this.state.selectionConfig.ignoreIds = ignoreIds
             this.state.selectionConfig.allIds = this.getPaginationDataSource().map(item => item[this.state.selectionConfig.primaryKey])
             this.state.selectionConfig.validRecords = this.getPaginationDataSource().filter((record, idx) => {
-                const { disabled = false } = this.state.selectionConfig.getProps(record, idx) || {}
+                var { disabled = false } = this.state.selectionConfig.getProps(record, idx) || {}
                 return disabled === false
             })
         } catch (e) {
@@ -200,17 +200,17 @@ export default class ListCore extends EventEmitter {
     }
 
     getSelections = () => {
-        const { ids = [], records = [] } = this.state.selectionConfig || {}
+        var { ids = [], records = [] } = this.state.selectionConfig || {}
         return { ids, records }
     }
 
     getTableProps = () => {
-        const { tableProps } = this.state
+        var { tableProps } = this.state
         return tableProps
     }
 
     setTableProps = (targetTableProps) => {
-        const { tableProps } = this.state
+        var { tableProps } = this.state
         this.state.tableProps = {
             ...(tableProps || {}),
             ...(targetTableProps || {}),
@@ -218,8 +218,8 @@ export default class ListCore extends EventEmitter {
     }
 
     getFilterProps = () => {
-        const { defaultFilterValues, filterValues } = this.state
-        const opts: any = {}
+        var { defaultFilterValues, filterValues } = this.state
+        var opts: any = {}
         if (defaultFilterValues && Object.keys(defaultFilterValues).length) {
             opts.initialValues = defaultFilterValues
         }
@@ -276,7 +276,7 @@ export default class ListCore extends EventEmitter {
 
     // 设置分页数据
     setPageData = (pageData: IListPageData) => {
-        const { pageSize, total, currentPage, totalPages } = pageData
+        var { pageSize, total, currentPage, totalPages } = pageData
         if ('pageSize' in pageData && !isNaN(pageSize)) this.state.pageSize = Number(pageSize)
         if ('total' in pageData && !isNaN(total)) this.state.total = Number(total)
         if ('currentPage' in pageData && !isNaN(currentPage)) this.state.currentPage = currentPage < 1 ? 1 : Number(currentPage)
@@ -285,7 +285,7 @@ export default class ListCore extends EventEmitter {
 
     // 获取分页数据
     getPageData = () => {
-        const { pageSize, total, currentPage, totalPages } = this.state
+        var { pageSize, total, currentPage, totalPages } = this.state
         return {
             pageSize,
             total,
@@ -301,9 +301,9 @@ export default class ListCore extends EventEmitter {
     
     // 设置当前页面
     setCurrentPage = (currentPage: number) => {
-        const { mode, dataSource, pageSize } = this.state
+        var { mode, dataSource, pageSize } = this.state
         if (mode === ModeType.DATASOURCE) {
-            const paginationDataSource = dataSource.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+            var paginationDataSource = dataSource.slice((currentPage - 1) * pageSize, currentPage * pageSize)
             this.setPaginationDataSource(paginationDataSource)
         }
         this.state.currentPage = currentPage
@@ -324,10 +324,10 @@ export default class ListCore extends EventEmitter {
 
     // 设置多实例列表数据
     setMultipleData = (multipleData: IListMultipleDataParams) => {
-        const multipleKeys = Object.keys(multipleData)
-        const formatMultipleData: IListMultipleData = { ...this.state.multipleData }
+        var multipleKeys = Object.keys(multipleData)
+        var formatMultipleData: IListMultipleData = { ...this.state.multipleData }
         multipleKeys.forEach(key => {
-            const pageSize = this.state.multiplePageSize[key] || 10
+            var pageSize = this.state.multiplePageSize[key] || 10
             if (Array.isArray(multipleData[key])) {
                 formatMultipleData[key] = {
                     currentPage: 1,
@@ -338,16 +338,16 @@ export default class ListCore extends EventEmitter {
                     totalPages: Math.ceil((multipleData[key] as any[]).length / pageSize),
                 }
             } else if (multipleData[key] !== undefined) {
-                const currentMultipleData = multipleData[key] as IListBaseResponse
+                var currentMultipleData = multipleData[key] as IListBaseResponse
                 if ('pageSize' in currentMultipleData && !isNaN(currentMultipleData.pageSize)) {
                     this.setMultiplePageSize({ [key]: currentMultipleData.pageSize })
                 }
 
-                const { currentPage: settingCurrentPage = 1, pageSize: settingPageSize = pageSize } = currentMultipleData
-                const currentPage = Number(settingCurrentPage)
-                const prevMultipleData = this.state.multipleData[key] || {}
-                const dataList = currentMultipleData.dataList || prevMultipleData.dataList || []
-                const paginationDataList = dataList.slice((currentPage - 1) * settingPageSize, (currentPage) * settingPageSize)                
+                var { currentPage: settingCurrentPage = 1, pageSize: settingPageSize = pageSize } = currentMultipleData
+                var currentPage = Number(settingCurrentPage)
+                var prevMultipleData = this.state.multipleData[key] || {}
+                var dataList = currentMultipleData.dataList || prevMultipleData.dataList || []
+                var paginationDataList = dataList.slice((currentPage - 1) * settingPageSize, (currentPage) * settingPageSize)                
                 formatMultipleData[key] = {
                     ...prevMultipleData,
                     currentPage,
@@ -409,9 +409,9 @@ export default class ListCore extends EventEmitter {
 
     // 获取搜索数据
     getFilterData = (enableInvalid?: boolean) => {
-        const result = {}
+        var result = {}
         if (this.filterInstance) {
-            const filterData = this.filterInstance.getFormState(state => state.values)
+            var filterData = this.filterInstance.getFormState(state => state.values)
             Object.keys(filterData).forEach((key) => {
                 if (enableInvalid === true ||
                     [null, undefined].indexOf(filterData[key]) === -1) {
