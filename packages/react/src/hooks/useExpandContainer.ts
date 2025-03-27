@@ -3,12 +3,12 @@ import ListContext from '../context'
 import { ListLifeCycleTypes } from '@alist/core'
 import { IExpandProps } from '../types'
 
-export const useExpandContainer = (props: IExpandProps) => {
-    const list = useContext(ListContext)
-    const { targetPath, form, schema } = props
-    const componentProps = schema.getExtendsComponentProps()
-    const { expandStatus: propExpandStatus } = componentProps
-    const setDisplay = (display) => {
+export var useExpandContainer = (props: IExpandProps) => {
+    var list = useContext(ListContext)
+    var { targetPath, form, schema } = props
+    var componentProps = schema.getExtendsComponentProps()
+    var { expandStatus: propExpandStatus } = componentProps
+    var setDisplay = (display) => {
         form.setFormState(state => state.expandStatus = display ? 'expand' : 'collapse')
         form.notify(ListLifeCycleTypes.ON_LIST_EXPAND_STATUS_SYNC)
         form.setFieldState(targetPath, state => {
@@ -29,7 +29,7 @@ export const useExpandContainer = (props: IExpandProps) => {
     }, [])
 
     useEffect(() => {
-        const fnRef = form.subscribe(({ type }) => {
+        var fnRef = form.subscribe(({ type }) => {
             if (type === ListLifeCycleTypes.ON_LIST_FILTER_ITEM_EXPAND) {
                 setDisplay(true)
             } else if (type === ListLifeCycleTypes.ON_LIST_FILTER_ITEM_COLLAPSE) {
