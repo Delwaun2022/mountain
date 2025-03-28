@@ -5,19 +5,19 @@ import ListDomain from '../context/listDomain'
 import { createListEffects, createListActions, useEva } from '../shared'
 import { IListUIProps } from '../types'
 
-export const useList = (options: IListUIProps): IList & { actions: any } => {
-    const optionsRef = useRef<IListUIProps>(options)
-    const actionsRef = useRef<any>(options.actions)
-    const listDomain = useContext(ListDomain)
+export let useList = (options: IListUIProps): IList & { actions: any } => {
+    let optionsRef = useRef<IListUIProps>(options)
+    let actionsRef = useRef<any>(options.actions)
+    let listDomain = useContext(ListDomain)
     actionsRef.current = actionsRef.current || createListActions()
 
     // 延迟实现
-    const { implementActions, dispatch } = useEva({
+    let { implementActions, dispatch } = useEva({
         actions: actionsRef.current,
         effects: createListEffects(options.effects, actionsRef.current)
     })
 
-    const lifeCycles = [
+    let lifeCycles = [
         new ListLifeCycle(
           ({ type, payload }) => {
             dispatch.lazy(type, () => payload)
@@ -26,7 +26,7 @@ export const useList = (options: IListUIProps): IList & { actions: any } => {
         new ListLifeCycle(
           ListLifeCycleTypes.ON_LIST_WILL_INIT,
           ({ payload, ctx }) => {
-            const actions = {
+            let actions = {
               ...ctx,
               dispatch: ctx.notify
             }
@@ -44,16 +44,16 @@ export const useList = (options: IListUIProps): IList & { actions: any } => {
       ]
 
     optionsRef.current.lifeCycles = lifeCycles
-    const alreadyHaveList = !!optionsRef.current.list    
-    const list = useMemo(() => {
-        const originList = alreadyHaveList ? optionsRef.current.list : createList(optionsRef.current)
+    let alreadyHaveList = !!optionsRef.current.list    
+    let list = useMemo(() => {
+        let originList = alreadyHaveList ? optionsRef.current.list : createList(optionsRef.current)
         return {
           ...originList,
           actions: actionsRef.current,
         }
     }, [])
 
-    const { dataSource } = options || {}
+    let { dataSource } = options || {}
     useEffect(() => {
       if ('dataSource' in options) {
         list.setDataSource(dataSource)
