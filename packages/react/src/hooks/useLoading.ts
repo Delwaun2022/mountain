@@ -5,17 +5,17 @@ import { ListLifeCycleTypes, IList } from '@alist/core'
 import useForceUpdate from './useForceUpdate'
 import { ITableProps, ILoadingHook } from '../types'
 
-export let useLoading = (props: ITableProps = {}, propList?: IList): ILoadingHook => {
-    let { multipleId: propsMultipleId } = props
-    let list = propList || useContext(ListContext)
-    let { id: contextMultipleId } = useContext(MultipleContext) || {}
-    let multipleId = propsMultipleId || contextMultipleId
-    let loading = list ? list.getLoading() : props.loading
+export const useLoading = (props: ITableProps = {}, propList?: IList): ILoadingHook => {
+    const { multipleId: propsMultipleId } = props
+    const list = propList || useContext(ListContext)
+    const { id: contextMultipleId } = useContext(MultipleContext) || {}
+    const multipleId = propsMultipleId || contextMultipleId
+    const loading = list ? list.getLoading() : props.loading
     
-    let forceUpdate = useForceUpdate()
-    let refresh = (opts) => {
-        let { payload } = opts;
-        let { notifyId } = payload || {}
+    const forceUpdate = useForceUpdate()
+    const refresh = (opts) => {
+        const { payload } = opts;
+        const { notifyId } = payload || {}
         if (notifyId) {
             if (multipleId !== undefined) {
                 if (notifyId && notifyId.some(id => id === multipleId)) {
@@ -31,7 +31,7 @@ export let useLoading = (props: ITableProps = {}, propList?: IList): ILoadingHoo
 
     useEffect(() => {
         if (list) {
-            let id = list.subscribe(ListLifeCycleTypes.ON_LIST_LOADING_REFRESH, refresh)
+            const id = list.subscribe(ListLifeCycleTypes.ON_LIST_LOADING_REFRESH, refresh)
             return function cleanup () {
                 list.unSubscribe(id)
             }
